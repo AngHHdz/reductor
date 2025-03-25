@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Optimizador de Imágenes</title>
+    <title>CHIQUITEADOR DE IMAGENES</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Optimizador de Imágenes</h1>
+        <h1>Pagina para chiquitiar tu imagenes 😛</h1>
         <input type="file" id="fileInput" multiple accept="image/*">
         <div class="slider-container">
-            <label for="qualitySlider">Calidad: <span id="qualityValue">80</span>%</label>
+            <label for="qualitySlider">Seleciona calidad de reduccion: <span id="qualityValue">80</span>%</label>
             <input type="range" id="qualitySlider" min="1" max="100" value="80" oninput="updateQuality()">
         </div>
-        <button onclick="processImages()">Optimizar Imágenes</button>
+        <button onclick="processImages()">Chiquitea tu imagen</button>
         <div id="output"></div>
     </div>
 
