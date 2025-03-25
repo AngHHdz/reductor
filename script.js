@@ -1,4 +1,5 @@
 let quality = 0.8;
+let compressedImages = [];
 
 function updateQuality() {
     const slider = document.getElementById('qualitySlider');
@@ -10,6 +11,7 @@ function processImages() {
     const input = document.getElementById('fileInput');
     const output = document.getElementById('output');
     output.innerHTML = '';
+    compressedImages = [];
 
     if (input.files.length === 0) {
         alert('Por favor, selecciona al menos una imagen.');
@@ -27,6 +29,13 @@ function processImages() {
         };
         reader.readAsDataURL(file);
     });
+
+    // Crear botón para descargar todo
+    const downloadAllBtn = document.createElement('button');
+    downloadAllBtn.innerText = 'Descargar Todo';
+    downloadAllBtn.onclick = downloadAllImages;
+    downloadAllBtn.className = 'download-all-btn';
+    output.appendChild(downloadAllBtn);
 }
 
 function compressImage(img, fileName, quality) {
@@ -39,6 +48,7 @@ function compressImage(img, fileName, quality) {
 
     const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
     displayCompressedImage(compressedDataUrl, fileName);
+    compressedImages.push({ name: 'compressed_' + fileName, dataUrl: compressedDataUrl });
 }
 
 function displayCompressedImage(dataUrl, fileName) {
@@ -57,4 +67,25 @@ function displayCompressedImage(dataUrl, fileName) {
     link.innerText = 'Descargar ' + fileName;
     link.className = 'download-link';
     output.appendChild(link);
+}
+
+function downloadAllImages() {
+    if (compressedImages.length === 0) {
+        alert('No hay imágenes para descargar.');
+        return;
+    }
+
+    const zip = new JSZip();
+
+    compressedImages.forEach(img => {
+        const data = img.dataUrl.split(',')[1];
+        zip.file(img.name, data, { base64: true });
+    });
+
+    zip.generateAsync({ type: 'blob' }).then(content => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = 'compressed_images.zip';
+        link.click();
+    });
 }
