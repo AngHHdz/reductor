@@ -1,4 +1,3 @@
-
 let quality = 0.8;
 
 function updateQuality() {
@@ -24,13 +23,13 @@ function processImages() {
             img.src = e.target.result;
             img.className = 'image-preview';
             output.appendChild(img);
-            compressImage(img, quality);
+            compressImage(img, file.name, quality);
         };
         reader.readAsDataURL(file);
     });
 }
 
-function compressImage(img, quality) {
+function compressImage(img, fileName, quality) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
@@ -44,5 +43,16 @@ function compressImage(img, quality) {
         compressedImg.src = compressedDataUrl;
         compressedImg.className = 'image-preview';
         document.getElementById('output').appendChild(compressedImg);
+
+        createDownloadLink(compressedDataUrl, fileName);
     };
+}
+
+function createDownloadLink(dataUrl, fileName) {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'compressed_' + fileName;
+    link.innerText = 'Descargar ' + fileName;
+    link.className = 'download-link';
+    document.getElementById('output').appendChild(link);
 }
