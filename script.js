@@ -19,11 +19,11 @@ function processImages() {
     Array.from(input.files).forEach(file => {
         const reader = new FileReader();
         reader.onload = function (e) {
-            const img = document.createElement('img');
+            const img = new Image();
             img.src = e.target.result;
-            img.className = 'image-preview';
-            output.appendChild(img);
-            compressImage(img, file.name, quality);
+            img.onload = () => {
+                compressImage(img, file.name, quality);
+            };
         };
         reader.readAsDataURL(file);
     });
@@ -33,26 +33,28 @@ function compressImage(img, fileName, quality) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0, img.width, img.height);
 
-        const compressedImg = document.createElement('img');
-        compressedImg.src = compressedDataUrl;
-        compressedImg.className = 'image-preview';
-        document.getElementById('output').appendChild(compressedImg);
-
-        createDownloadLink(compressedDataUrl, fileName);
-    };
+    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+    displayCompressedImage(compressedDataUrl, fileName);
 }
 
-function createDownloadLink(dataUrl, fileName) {
+function displayCompressedImage(dataUrl, fileName) {
+    const output = document.getElementById('output');
+
+    // Mostrar imagen comprimida
+    const compressedImg = document.createElement('img');
+    compressedImg.src = dataUrl;
+    compressedImg.className = 'image-preview';
+    output.appendChild(compressedImg);
+
+    // Crear enlace de descarga
     const link = document.createElement('a');
     link.href = dataUrl;
     link.download = 'compressed_' + fileName;
     link.innerText = 'Descargar ' + fileName;
     link.className = 'download-link';
-    document.getElementById('output').appendChild(link);
+    output.appendChild(link);
 }
