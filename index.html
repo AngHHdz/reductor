@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizador de Imágenes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Optimiza tus Imágenes 🚀</h1>
+        <input type="file" id="fileInput" multiple accept="image/*">
+        <div class="slider-container">
+            <label for="qualitySlider">Calidad: <span id="qualityValue">80</span>%</label>
+            <input type="range" id="qualitySlider" min="10" max="100" value="80" step="1" onchange="updateQuality()">
+        </div>
+        <button onclick="processImages()">Reducir Tamaño</button>
+        <div id="output"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
